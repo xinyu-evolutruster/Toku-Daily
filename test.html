@@ -117,7 +117,85 @@
         </tbody>
     </table>
 
-    <form action=""></form>
+    <form action="/tacos">
+        <p>
+            <label for="username">Enter a user name</label>
+            <input id="username" , type="text" placeholder="user name" name="username">
+        </p>
+        <p><label for="password">Enter the password</label>
+            <input id="password" , type="password" , placeholder="password" name="password">
+        </p>
+
+        <input type="color">
+        <input type="number" , placeholder="enter a number">
+        <input type="date">
+
+        <button type="submit">submit</button>
+    </form>
+
+    <form action="https://www.youtube.com/search">
+        <label for="redditsearch">Search Reddit!</label>
+        <input id="redditsearch" type="text" name="search_query">
+        <button>Submit</button>
+    </form>
+
+    <div class="preference">
+        <label for="cheese">Do you like cheese?</label>
+        <input type="checkbox" name="cheese" id="cheese">
+    </div>
+
+    <form action="/languages">
+        <label for="radio">
+            Languages:
+        </label>
+        <div>
+            <label for="radio1"> Chinese </label>
+            <input type="radio" name="radio" id="radio1" value="c">
+        </div>
+        <div>
+            <label for="radio2"> English </label>
+            <input type="radio" name="radio" id="radio2" value="e">
+        </div>
+        <div>
+            <label for="radio3"> Japanese </label>
+            <input type="radio" name="radio" id="radio3" value="j">
+        </div>
+
+        <div>
+            <lable for="pet-select">Select your pet</lable>
+            <select name="pets" id="pet-select">
+                <option value="" id="none">--Please choose an option</options>
+                <option value="hamster">hamster</options>
+                <option value="owl">owl</options>
+            </select>
+        </div>
+
+        <div>
+            <label for="volume">Choose the volume</label>
+            <input id="volume" name="volume" type="range" min="0" max="100" step="10">
+            </label>
+        </div>
+
+        <div>
+            <label for="textarea">Any special requests?</label>
+            <textarea name="textarea" id="textarea" cols="30" rows="10">s</textarea>
+        </div>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <h2>Validation Demo</h2>
+
+    <form action="/dummy">
+        <label for="first">Enter First Name</label>
+        <input type="text" name="first_name" id="first">
+        <p>
+            <input type="email" required>
+        </p>
+        <button>
+            Submit!
+        </button>
+    </form>
 
     <footer>
         <p> footer1 </p>
