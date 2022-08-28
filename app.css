@@ -1,0 +1,37 @@
+h1,
+h2 {
+    text-align: center;
+    width: 50%;
+    color: indigo;
+    font-weight: 600;
+    text-decoration: blue line-through wavy;
+}
+
+button {
+    color: magenta;
+    background-color: aliceblue;
+}
+
+p {
+    color: olive;
+    line-height: 2;
+    letter-spacing: 15px;
+    font-size: 28px;
+    font-family: Helvetica, sans-serif;
+}
+
+a {
+    text-decoration: none;
+}
+
+#signup {
+    background-color: #1d3557;
+}
+
+.tag {
+    background-color: #457b6d;
+}
+
+li a {
+    color: coral;
+}
