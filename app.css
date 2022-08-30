@@ -1,13 +1,13 @@
-.circle {
-    background-color: magenta;
-    border-radius: 50%;
-    height: 300px;
-    width: 300px;
-    transition: 1s 1s;
-
+img {
+    width: 30%;
+    margin: 1.2%
 }
 
-.circle:hover {
-    background-color: cyan;
-    border-radius: 0;
+nav {
+    text-transform: uppercase;
+    border-bottom: 2px solid #f1f1f1;
+    margin-left: calc(10%/6);
+    padding: 10px;
+    font-family: Roboto;
+    font-weight: bold;
 }
