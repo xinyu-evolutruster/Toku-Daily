@@ -6,3 +6,4 @@ class RoomForm(ModelForm):
     class Meta:
         model = Room  # model to create a form for
         fields = '__all__'
+        exclude = ['host', 'participants']

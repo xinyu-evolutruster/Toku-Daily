@@ -3,30 +3,27 @@
 {% block content %}
 
 <style>
-    .home-container{
+    .profile-container {
         display: grid;
         grid-template-columns: 1fr 3fr 1fr;
     }
 </style>
 
-<h1>Home Templates</h1>
+<h1>{{user.username}}</h1>
 
-<main class="home-container">
+<main class="profile-container">
     <aside>
         {% include 'base/topics_component.html' %}
     </aside>
 
     <section>
-        <h5>{{room_count}} rooms available</h5>
-        <a href="{% url 'create-room' %}">Create Room</a>
         {% include 'base/feed_component.html' %}
     </section>
 
     <aside>
         {% include 'base/activity_component.html' %}
     </aside>
-    
-</main>
 
+</main>
 
 {% endblock content %}
