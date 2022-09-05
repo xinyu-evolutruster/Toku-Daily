@@ -7,12 +7,44 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+
 from .models import Room, Topic, Message
 from .forms import RoomForm
+from .serializer import RoomSerializer, TopicSerializer, MessageSerializer, UserSerializer
 
 # Create your views here.
 
 
+@api_view(['GET', 'PUT', 'POST'])
+def getRoutes(request):
+
+    routes = [
+        {
+            'Endpoint': '/room/id',
+            'method': 'GET',
+            'body': None,
+            'description': 'Returns a specific room'
+        },
+        {
+            'Endpoint': '/profile/id',
+            'method': 'GET',
+            'body': None,
+            'description': 'Returns a specific profile'
+        },
+        {
+            'Endpoint': '/create-room/',
+            'method': 'POST',
+            'body': {'body': ""},
+            'description': 'Creates a room'
+        },
+    ]
+
+    return Response(routes)
+
+
+@api_view(['GET', 'POST'])
 def loginPage(request):
     page = 'login'
     if request.user.is_authenticated:
@@ -41,6 +73,7 @@ def logOutUser(request):
     return redirect('home')
 
 
+@api_view(['GET', 'POST'])
 def registerUser(request):
     form = UserCreationForm()
 
@@ -58,6 +91,7 @@ def registerUser(request):
     return render(request, 'base/login_register.html', {'form': form})
 
 
+@api_view(['GET', 'POST'])
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
 
@@ -72,11 +106,18 @@ def home(request):
     room_count = rooms.count()
     room_messages = Message.objects.filter(Q(room__topic__name__icontains=q))
 
-    context = {'rooms': rooms, 'topics': topics,
-               'room_count': room_count, 'room_messages': room_messages}
-    return render(request, 'base/home.html', context)
+    room_serializer = RoomSerializer(rooms, many=True)
+    topic_serializer = TopicSerializer(topics, many=True)
+    message_serializer = MessageSerializer(room_messages, many=True)
+
+    context = {'rooms': room_serializer.data, 'topics': topic_serializer.data,
+               'room_count': room_count, 'room_messages': message_serializer.data}
+
+    # return render(request, 'base/home.html', context)
+    return Response(context)
 
 
+@api_view(['GET', 'POST'])
 def room(request, pk):
     room = Room.objects.get(id=pk)
     room_messages = room.message_set.all().order_by('-created')
@@ -91,21 +132,36 @@ def room(request, pk):
         room.participants.add(request.user)
         return redirect('room', pk=room.id)
 
-    context = {'room': room, 'room_messages': room_messages,
-               'participants': participants}
-    return render(request, 'base/room.html', context)
+    room_serializer = RoomSerializer(room)
+    message_serializer = MessageSerializer(room_messages, many=True)
+    participant_serializer = UserSerializer(participants, many=True)
+
+    # 'room' : room
+
+    context = {'room': room_serializer.data, 'room_messages': message_serializer.data,
+               'participants': participant_serializer.data}
+    # return render(request, 'base/room.html', context)
+    return Response(context)
 
 
+@api_view(['GET'])
 def userProfile(request, pk):
     user = User.objects.get(id=pk)
     rooms = user.room_set.all()
     room_messages = user.message_set.all()
     topics = Topic.objects.all()
-    context = {'user': user, 'rooms': rooms,
-               'room_messages': room_messages, 'topics': topics}
-    return render(request, 'base/profile.html', context)
+
+    user_serializer = UserSerializer(user)
+    room_serializer = RoomSerializer(rooms, many=True)
+    message_serializer = MessageSerializer(room_messages, many=True)
+    topic_serializer = TopicSerializer(topics, many=True)
+
+    context = {'user': user_serializer.data, 'rooms': room_serializer.data,
+               'room_messages': message_serializer.data, 'topics': topic_serializer.data}
+    return Response(context)
 
 
+@api_view(['GET', 'POST'])
 @login_required(login_url='/login')
 def createRoom(request):
     form = RoomForm()
@@ -122,6 +178,7 @@ def createRoom(request):
     return render(request, 'base/room_form.html', context)
 
 
+@api_view(['GET', 'POST'])
 @login_required(login_url='/login')
 def updateRoom(request, pk):
     room = Room.objects.get(id=pk)
@@ -139,6 +196,7 @@ def updateRoom(request, pk):
     return render(request, 'base/room_form.html', context)
 
 
+@api_view(['GET', 'POST'])
 @login_required(login_url='/login')
 def deleteRoom(request, pk):
     room = Room.objects.get(id=pk)
@@ -151,6 +209,7 @@ def deleteRoom(request, pk):
     return render(request, 'base/delete.html', {'obj': room})
 
 
+@api_view(['GET', 'POST'])
 @login_required(login_url='/login')
 def deleteMessage(request, pk):
     message = Message.objects.get(id=pk)
